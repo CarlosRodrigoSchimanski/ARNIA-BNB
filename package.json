@@ -1,0 +1,25 @@
+{
+  "name": "arnia-bnb",
+  "version": "1.0.0",
+  "description": "api  conclusão do segundo modulo de full stack 2131231",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tsx ./src/server.ts",
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "tsx": "^4.10.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.4",
+    "vitest": "^1.6.0",
+    "yup": "^1.4.0"
+  }
+}
