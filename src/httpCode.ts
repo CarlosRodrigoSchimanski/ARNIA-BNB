@@ -1,0 +1,1 @@
+export const codes = {create:200,badRequest:400}

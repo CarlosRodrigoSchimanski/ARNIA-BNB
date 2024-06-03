@@ -1,7 +1,7 @@
-import mongoose from "mongoose"
-import { Iuser } from "../entities/User"
+import {mongoose} from "../database/database"
+import { IUser } from "../entities/User"
 
-const UserSchema = new mongoose.Schema<Iuser>({
+const UserSchema = new mongoose.Schema<IUser>({
     name:{
         type:String,
         required:true
@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema<Iuser>({
         type:String,
         required:true
     },
-    bookings:[mongoose.Schema.Types.ObjectId]
+    bookings:[{type:String}]
 })
 
-export const User = mongoose.model("User",UserSchema)
+export const Usermodel = mongoose.model("User",UserSchema)
