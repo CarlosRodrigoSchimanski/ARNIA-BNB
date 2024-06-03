@@ -1,6 +1,8 @@
-import { IUser, IUserDTO } from "../entities/User"
+import { IUser, IUserDTO, IUserLogin } from "../entities/User"
 import { UserRepository } from "../repositories/UserRepository"
-import { hash } from "bcrypt"
+import { hash,compare } from "bcrypt"
+import jwt from "jsonwebtoken"
+import 'dotenv/config'
 
 export class UserService {
     private repository: UserRepository
@@ -18,5 +20,20 @@ export class UserService {
             bookings:[]
         })
         return user
+    }
+
+    async loginUser(data:IUserLogin){
+        const user = await this.repository.findUserByEmail(data.email)
+        if(!user) throw new Error("User not found")
+
+        const sucsess = await compare(data.password,user.password)
+        if(!sucsess) throw new Error("Invalid password")
+        
+        const token = jwt.sign(
+            {id:user._id},
+            process.env.SECRET as string,
+            {expiresIn:"10m"}
+        )
+        return token
     }
 }

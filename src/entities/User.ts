@@ -16,3 +16,8 @@ export interface IUserDTO{
     cpf: number
     phone_number: string
 }
+
+export interface IUserLogin{
+    email: string
+    password: string
+}
