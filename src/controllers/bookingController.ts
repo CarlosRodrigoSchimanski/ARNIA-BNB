@@ -30,6 +30,6 @@ export async function createBooking(request:Request,response:Response) {
         const result = bookingService.createBooking(booking,bossService,id)
         return response.status(codes.create).send(result)
     } catch (error:any) {
-        return response.status(codes.badRequest).json({error:error.message})
+        return response.status(401).json({error:error.message})
     }
 }
