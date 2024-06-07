@@ -19,4 +19,8 @@ export class BookingRepository{
     async updateStatus(number:number,status:string){
         return this.bookingModel.updateOne({number:number},{status:status})
     }
+
+    async getAllByStatus(status:string){
+        return this.bookingModel.find({status:status}).exec()
+    }
 }

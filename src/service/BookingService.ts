@@ -43,4 +43,8 @@ export class BookingService {
         return newBooking
     }
 
+    async returnFreebedron(){
+        return this.repository.getAllByStatus("disponível")
+    }
+
 }
