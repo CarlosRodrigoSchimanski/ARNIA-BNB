@@ -33,3 +33,16 @@ export async function createBooking(request:Request,response:Response) {
         return response.status(401).json({error:error.message})
     }
 }
+
+export async function updateStatus(request:Request,response:Response){
+    //bedroon:number,data:string, idBoss:string,boss:BossService
+    const bedroon = request.body.bedroon
+    const id = request.body._id
+    const status = request.body.status
+    try {
+        const result = await bookingService.updateStatus(bedroon,status,id,bossService)
+        return response.status(codes.create).send({status:status})
+    } catch(error:any){
+        return response.status(401).json({error:error.message})
+    }
+}

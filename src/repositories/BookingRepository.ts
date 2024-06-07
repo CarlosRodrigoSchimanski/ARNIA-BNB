@@ -15,4 +15,8 @@ export class BookingRepository{
     async createBooking(data:IBooking): Promise<IBooking>{
         return this.bookingModel.create(data)
     }
+
+    async updateStatus(number:number,status:string){
+        return this.bookingModel.updateOne({number:number},{status:status})
+    }
 }

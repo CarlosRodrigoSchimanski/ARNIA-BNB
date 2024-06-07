@@ -30,4 +30,17 @@ export class BookingService {
         return booking
     }
 
+    async updateStatus(bedroon:number,data:string, idBoss:string,boss:BossService){
+        const booking = await this.repository.findBookingByNumber(bedroon)
+        if(!booking){
+            throw new Error("booking not found")
+        }
+        const isboss = await boss.findById(idBoss)
+        if(!isboss){
+            throw new Error("user Unauthorized")
+        }
+        const newBooking = this.repository.updateStatus(bedroon,data)
+        return newBooking
+    }
+
 }
