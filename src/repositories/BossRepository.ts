@@ -14,4 +14,8 @@ export class BossRepository{
     async createBoss(data:IBoss): Promise<IBoss>{
         return this.userModel.create(data)
     }
+
+    async findById(id:string){
+        return this.userModel.findById(id)
+    }
 }

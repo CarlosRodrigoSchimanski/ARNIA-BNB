@@ -13,11 +13,11 @@ export async function createUser(request:Request,response:Response) {
     try {
         const newUser = request.body
         const uservalidation = yup.object({
-            name:yup.string(),
-            email:yup.string().email(),
-            password:yup.string(),
-            cpf:yup.string(),
-            phone_number:yup.string()
+            name:yup.string().required(),
+            email:yup.string().email().required(),
+            password:yup.string().required(),
+            cpf:yup.string().required(),
+            phone_number:yup.string().required()
         })
         await uservalidation.validate(newUser)
         const result = await userService.createUser(newUser)

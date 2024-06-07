@@ -35,4 +35,8 @@ export class BossService {
         )
         return token
     }
+
+    async findById(id:string){
+        return this.repository.findById(id)
+    }
 }

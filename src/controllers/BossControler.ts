@@ -14,8 +14,8 @@ export async function createBoss(request:Request,response:Response) {
     try {
         const newUser = request.body
         const uservalidation = yup.object({
-            email:yup.string().email(),
-            password:yup.string()
+            email:yup.string().email().required(),
+            password:yup.string().required()
         })
         await uservalidation.validate(newUser)
         const result = await bossService.createBoss(newUser)
