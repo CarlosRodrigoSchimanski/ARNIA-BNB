@@ -1,13 +1,10 @@
 import { Router } from "express"
-import { storageMiddlleware } from "../middlewares/storege"
-import { tokenValidateMiddlleware } from "../middlewares/validateToken"
-import { createBooking, returnFree, updateStatus } from "../controllers/bookingController"
+import { createReservation } from "../controllers/BookingController"
+import { tokenValidateMiddleware } from "../middlewares/validateToken"
 
 const router = Router()
 
-router.post("/create", storageMiddlleware.single("photo"),tokenValidateMiddlleware,createBooking)
-router.post("/update",tokenValidateMiddlleware,updateStatus)
-router.get("/free",returnFree)
+router.post("/create",tokenValidateMiddleware,createReservation)
 
 
 export default router

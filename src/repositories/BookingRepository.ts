@@ -1,26 +1,43 @@
 import mongoose from 'mongoose'
 import { IBooking } from '../entities/Booking'
-import { number } from 'yup'
 
-export class BookingRepository{
-    private bookingModel:mongoose.Model<IBooking>
-    constructor(bookingModel:mongoose.Model<IBooking>){
-        this.bookingModel = bookingModel
+export class BookingRepository {
+    private roomModel: mongoose.Model<IBooking>;
+
+    constructor(roomModel: mongoose.Model<IBooking>) {
+        this.roomModel = roomModel;
     }
 
-    async findBookingByNumber(number:number){
-        return this.bookingModel.findOne({number:number})
+    async findBookingById(id: string): Promise<IBooking | null> {
+        return this.roomModel.findById(id).exec();
     }
 
-    async createBooking(data:IBooking): Promise<IBooking>{
-        return this.bookingModel.create(data)
+    async findAllBookings(): Promise<IBooking[]> {
+        return this.roomModel.find().exec();
     }
 
-    async updateStatus(number:number,status:string){
-        return this.bookingModel.updateOne({number:number},{status:status})
+    async findBookingsByRoomIdAndStatusAndDateRange(booking: IBooking): Promise<IBooking[]> {
+        return this.roomModel.find({
+            id_room: booking.id_room,
+            status: { $in: ['confirmada', 'em andamento'] },
+            $or: [
+                { checkin_date: { $lt: booking.checkout_date }, checkout_date: { $gt: booking.checkin_date } }
+            ]
+        }).exec();
     }
 
-    async getAllByStatus(status:string){
-        return this.bookingModel.find({status:status}).exec()
+    async createBooking(data: IBooking): Promise<IBooking> {
+        const booking = new this.roomModel(data);
+        return booking.save();
+    }
+
+    async findBookingsByDateRange(startDate: Date, endDate: Date): Promise<IBooking[]> {
+        return this.roomModel.find({
+            $or: [
+                { checkin_date: { $gte: startDate, $lte: endDate } },
+                { checkout_date: { $gte: startDate, $lte: endDate } },
+                { checkin_date: { $lte: startDate }, checkout_date: { $gte: endDate } }
+            ]
+        }).exec();
     }
 }

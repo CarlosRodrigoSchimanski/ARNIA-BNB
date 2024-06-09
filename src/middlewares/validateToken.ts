@@ -1,30 +1,34 @@
-import {NextFunction,Request,Response} from "express"
-import jwt from "jsonwebtoken"
+import { NextFunction, Request, Response } from "express"
+import jwt, { JwtPayload } from "jsonwebtoken"
 
-type JwtPayload = {
-    id: string
-}
+type TokenPayload = {
+    id: string;
+};
 
-export async function tokenValidateMiddlleware(request:Request, response:Response, next:NextFunction){
-    const {authorization} = request.headers
-    
-    if(!authorization){
-        return response.status(401).json({message:"Unauthorized"})
-    }
-
-    const [,token] = authorization.split(" ")
-    
-    
-    
+export async function tokenValidateMiddleware(request: Request, response: Response, next: NextFunction) {
     try {
-        const {id} = jwt.verify(token, process.env.SECRET as string) as JwtPayload
-        request.body = {
-            _id:id,
-            ...request.body
-        }
-    } catch (error:any) {
-        return response.status(401).json({error:error.message})
-    }
+        const { authorization } = request.headers
 
-    next()
+        if (!authorization) {
+            return response.status(401).json({ error: "Authorization header is missing" })
+        }
+
+        const [, token] = authorization.split(" ")
+
+        if (!token) {
+            return response.status(401).json({ error: "Token is missing" })
+        }
+
+        const decodedToken = jwt.verify(token, process.env.SECRET as string) as TokenPayload
+
+        request.body = {
+            _id: decodedToken.id,
+            ...request.body,
+        };
+
+        next()
+    } catch (error) {
+        console.error("Error validating token:", error)
+        return response.status(401).json({ error: "Invalid token" })
+    }
 }

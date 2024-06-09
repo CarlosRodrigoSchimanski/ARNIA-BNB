@@ -1,12 +1,12 @@
 import express from 'express'
-import { consolLog } from './middlewares/log'
+import { consoleLog } from './middlewares/log'
 import router from './routes'
 
 
 const app = express()
 app.use(express.json())
 app.use(express.static("uploads/"))
-app.use("/",consolLog)
+app.use("/",consoleLog)
 app.use("/",router)
 
 

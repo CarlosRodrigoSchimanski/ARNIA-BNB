@@ -18,7 +18,7 @@ const UserSchema = new mongoose.Schema<IUser>({
         type:String,
         required:true
     },
-    bookings:[{type:String}] //[{type: mongoose.Schema.ObjectId,ref:"Booking"}]
+    bookings:[{type:String}]
 })
 
-export const Usermodel = mongoose.model("User",UserSchema)
+export const UserModel = mongoose.model("Users",UserSchema)

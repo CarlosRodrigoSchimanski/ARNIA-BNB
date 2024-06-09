@@ -1,1 +1,1 @@
-export const codes = {create:200,badRequest:400}
+export const codes = {created:200,badRequest:400}

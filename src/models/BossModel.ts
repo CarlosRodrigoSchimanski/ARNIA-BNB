@@ -12,4 +12,4 @@ const BossSchema = new mongoose.Schema<IBoss>({
     }
 })
 
-export const Bossmodel = mongoose.model("Boss",BossSchema)
+export const BossModel = mongoose.model<IBoss>("boss",BossSchema)

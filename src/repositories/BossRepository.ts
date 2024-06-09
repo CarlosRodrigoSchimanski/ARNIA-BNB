@@ -1,21 +1,35 @@
 import mongoose from 'mongoose'
 import { IBoss } from '../entities/Boss'
 
-export class BossRepository{
-    private userModel:mongoose.Model<IBoss>
-    constructor(userModel:mongoose.Model<IBoss>){
-        this.userModel = userModel
+
+export class BossRepository {
+    private model: mongoose.Model<IBoss>;
+
+    constructor(model: mongoose.Model<IBoss>) {
+        this.model = model;
     }
 
-    async findBossByEmail(email:string){
-        return this.userModel.findOne({email:email})
+    async findByEmail(email: string){
+        try {
+            return await this.model.findOne({ email }).exec();
+        } catch (error) {
+            throw new Error(`Error finding boss by email: ${error}`);
+        }
     }
 
-    async createBoss(data:IBoss): Promise<IBoss>{
-        return this.userModel.create(data)
+    async create(data: IBoss): Promise<IBoss> {
+        try {
+            return await this.model.create(data);
+        } catch (error) {
+            throw new Error(`Error creating boss: ${error}`);
+        }
     }
 
-    async findById(id:string){
-        return this.userModel.findById(id)
+    async findById(id: string): Promise<IBoss | null> {
+        try {
+            return await this.model.findById(id).exec();
+        } catch (error) {
+            throw new Error(`Error finding boss by ID: ${error}`);
+        }
     }
 }

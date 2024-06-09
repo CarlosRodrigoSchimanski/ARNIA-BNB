@@ -4,7 +4,7 @@ import { createBoss, loginBoss } from "../controllers/BossControler"
 
 const router = Router()
 
-//router.post("/create", createBoss)
+router.post("/create", createBoss)
 router.post("/login", loginBoss)
 
 

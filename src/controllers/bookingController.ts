@@ -1,51 +1,39 @@
-import { Bookingmodel } from "../models/BookingModel"
-import {Request,Response} from 'express'
-import { BookingRepository } from "../repositories/BookingRepository"
-import { BookingService } from "../service/BookingService"
-import { BossRepository } from "../repositories/BossRepository"
-import { BossService } from "../service/BossService"
-import { Bossmodel } from "../models/BossModel"
-import { codes } from "../httpCode"
-import { number } from "yup"
+import { Request, Response } from 'express'
+import { codes } from '../httpCode'
+import { BookingRepository } from '../repositories/BookingRepository'
+import { BookingModel } from '../models/BookingModel'
+import { BookingService } from '../service/BookingService'
+import { IBooking } from '../entities/Booking'
+import * as yup from 'yup'
 
-
-
-const bookingRepository = new BookingRepository(Bookingmodel)
+const bookingRepository = new BookingRepository(BookingModel)
 const bookingService = new BookingService(bookingRepository)
 
-const bossRepository = new BossRepository(Bossmodel)
-const bossService = new BossService(bossRepository)
-
-export async function createBooking(request:Request,response:Response) {
-    const booking = {
-        number:request.body.number,
-        type:request.body.type,
-        guest_capacity:request.body.guest_capacity,
-        daily_rate:request.body.daily_rate,
-        status:request.body.status,
-        photo:request.body.photo
-    }
-    const id = request.body._id
+export async function createReservation(request: Request, response: Response) {
     try {
-        const result = bookingService.createBooking(booking,bossService,id)
-        return response.status(codes.create).send(result)
+        const reservationSchema = yup.object().shape({
+            checkin_date: yup.date().required(),
+            checkout_date: yup.date().required(),
+            guests: yup.number().required(),
+            id_room: yup.string().required(),
+            _id: yup.string().required()
+        })
+        await reservationSchema.validate(request.body, { abortEarly: false })
+
+        const newReservation: IBooking = {
+            checkin_date: request.body.checkin_date,
+            checkout_date: request.body.checkout_date,
+            guests: request.body.guests,
+            id_room: request.body.id_room,
+            id_guest: request.body._id,
+            status: "confirmada"
+        }
+
+        const createdReservation = await bookingService.createReservation(newReservation)
+        return response.status(codes.created).send(createdReservation)
+
     } catch (error:any) {
-        return response.status(401).json({error:error.message})
+        console.error("Error creating reservation:", error)
+        return response.status(codes.badRequest).json({ error: error.message })
     }
-}
-
-export async function updateStatus(request:Request,response:Response){
-    const bedroon = request.body.bedroon
-    const id = request.body._id
-    const status = request.body.status
-    try {
-        const result = await bookingService.updateStatus(bedroon,status,id,bossService)
-        return response.status(codes.create).send({status:status})
-    } catch(error:any){
-        return response.status(401).json({error:error.message})
-    }
-}
-
-export async function returnFree(request:Request, response:Response){
-    return response.status(codes.create).json(await bookingService.returnFreebedron())
 }
