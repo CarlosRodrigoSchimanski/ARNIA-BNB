@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx ./src/server.ts",
     "test": "vitest",
-    "boss": "tsx .src/createboss.ts"
+    "boss": "tsx .src/createboss.ts",
+    "build": "tsup src",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +28,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.4",
     "multer": "^1.4.5-lts.1",
+    "tsup": "^8.1.0",
     "vitest": "^1.6.0",
     "yup": "^1.4.0"
   }
