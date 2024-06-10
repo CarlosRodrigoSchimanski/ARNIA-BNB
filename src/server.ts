@@ -5,7 +5,7 @@ import router from './routes'
 
 const app = express()
 app.use(express.json())
-app.use(express.static("uploads/"))
+app.use(express.static("src/uploads/"))
 app.use("/",consoleLog)
 app.use("/",router)
 
