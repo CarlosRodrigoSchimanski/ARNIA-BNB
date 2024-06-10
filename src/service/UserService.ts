@@ -3,6 +3,8 @@ import { UserRepository } from "../repositories/UserRepository"
 import { hash, compare } from "bcrypt"
 import jwt from "jsonwebtoken"
 import 'dotenv/config'
+import mongoose from "mongoose"
+import { BookingService } from "./BookingService"
 
 export class UserService {
     private repository: UserRepository
@@ -37,10 +39,42 @@ export class UserService {
                 throw new Error("Invalid password")
             }
             
-            const token = jwt.sign({id:user._id},process.env.SECRET as string,{ expiresIn: "10m" })
+            const token = jwt.sign({id:user._id},process.env.SECRET as string,{ expiresIn: "50m" })
             return token
         } catch (error:any) {
             throw new Error(`Error logging in: ${error.message}`)
+        }
+    }
+
+    async addBooking(userId: string, bookingId: string): Promise<void> {
+        try {
+            await this.repository.addBookingToUser(
+                new mongoose.Types.ObjectId(userId),
+                new mongoose.Types.ObjectId(bookingId)
+            );
+            console.log('Booking added to user successfully')
+        } catch (error) {
+            console.error('Error adding booking to user:', error)
+        }
+    }
+
+    async listUserBookings(userId: string): Promise<IUser | null> {
+        try {
+            return await this.repository.listUserBookings(new mongoose.Types.ObjectId(userId))
+        } catch (error: any) {
+            throw new Error(`Error listing user bookings: ${error.message}`)
+        }
+    }
+
+    async removeBooking(userId: string, bookingId: string,bookingService:BookingService): Promise<void> {
+        try {
+            await this.repository.removeBookingFromUser(
+                new mongoose.Types.ObjectId(userId),
+                new mongoose.Types.ObjectId(bookingId)
+            )
+            await bookingService.deleteBooking(bookingId)
+        } catch (error:any) {
+            throw new Error(`Error removing booking from user: ${error.message}`)
         }
     }
 }

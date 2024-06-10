@@ -31,7 +31,7 @@ export class BossService {
         const token = jwt.sign(
             {id:boss._id},
             process.env.SECRET as string,
-            {expiresIn:"10m"}
+            {expiresIn:"50m"}
         )
         return token
     }

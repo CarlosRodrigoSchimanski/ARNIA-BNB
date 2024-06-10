@@ -3,7 +3,11 @@ import { IBedroom } from "../entities/Bedroom"
 
 const BedroomSchema = new mongoose.Schema<IBedroom>({
     number: { type: Number, required: true },
-    type: { type: String, required: true },
+    type: {
+        type: String,
+        required: true,
+        enum: ['individual','duplo','suíte']
+    },
     guest_capacity: { type: Number, required: true, min: 1 },
     daily_rate: { type: Number, required: true, min: 0 },
     photo: { type: String, required: true },

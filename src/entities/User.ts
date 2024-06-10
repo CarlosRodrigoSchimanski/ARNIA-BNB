@@ -1,12 +1,13 @@
 import mongoose from "mongoose"
 
 export interface IUser{
+    _id?: mongoose.Types.ObjectId
     name: string
     email: string
     password: string
     cpf: number
     phone_number: string
-    bookings:string[]
+    bookings:mongoose.Schema.Types.ObjectId[]
 }
 
 export interface IUserDTO{

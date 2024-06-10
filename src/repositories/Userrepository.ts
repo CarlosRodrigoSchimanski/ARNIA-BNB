@@ -8,9 +8,9 @@ export class UserRepository {
         this.userModel = userModel
     }
 
-    async getUserByEmail(email: string){
+    async getUserByEmail(email: string): Promise<IUser | null> {
         try {
-            return await this.userModel.findOne({ email: email }).exec()
+            return await this.userModel.findOne({ email }).exec()
         } catch (error) {
             throw new Error(`Error finding user by email: ${error}`)
         }
@@ -24,5 +24,41 @@ export class UserRepository {
         }
     }
 
-    // Adicione métodos adicionais conforme necessário, como updateUser, deleteUser, etc.
+    async findById(id: mongoose.Types.ObjectId): Promise<IUser | null> {
+        try {
+            return await this.userModel.findById(id).exec()
+        } catch (error) {
+            throw new Error(`Error finding user by ID: ${error}`)
+        }
+    }
+
+    async addBookingToUser(userId: mongoose.Types.ObjectId, bookingId: mongoose.Types.ObjectId): Promise<void> {
+        try {
+            await this.userModel.updateOne(
+                { _id: userId },
+                { $push: { bookings: bookingId } }
+            ).exec()
+        } catch (error) {
+            throw new Error(`Error adding booking to user: ${error}`)
+        }
+    }
+
+    async listUserBookings(userId: mongoose.Types.ObjectId): Promise<IUser | null> {
+        try {
+            return await this.userModel.findById(userId).populate('bookings').exec()
+        } catch (error) {
+            throw new Error(`Error listing user bookings: ${error}`)
+        }
+    }
+
+    async removeBookingFromUser(userId: mongoose.Types.ObjectId, bookingId: mongoose.Types.ObjectId): Promise<void> {
+        try {
+            await this.userModel.updateOne(
+                { _id: userId },
+                { $pull: { bookings: bookingId } }
+            ).exec()
+        } catch (error) {
+            throw new Error(`Error removing booking from user: ${error}`)
+        }
+    }
 }

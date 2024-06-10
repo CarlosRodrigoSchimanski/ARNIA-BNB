@@ -34,7 +34,7 @@ export async function loginBoss(request: Request, response: Response) {
         await loginValidation.validate(loginData)
         
         const result = await bossService.loginBoss(loginData)
-        return response.status(codes.created).send(result)
+        return response.status(codes.created).send({ token: result })
     } catch (error:any) {
         return response.status(codes.badRequest).json({ error: error.message })
     }

@@ -1,8 +1,11 @@
+import mongoose from "mongoose"
+
 export interface IBedroom{
-  number:number,
-  type: 'individual'| 'duplo'| 'suíte'
-  guest_capacity:number,
-  daily_rate:number,
-  photo:string,
-  status: 'disponível' | 'ocupado' | 'em manutenção';
+  _id?: mongoose.Types.ObjectId
+  number:number
+  type:string
+  guest_capacity:number
+  daily_rate:number
+  photo:string
+  status:string
 }

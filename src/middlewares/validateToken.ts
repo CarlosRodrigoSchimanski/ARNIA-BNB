@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from "express"
-import jwt, { JwtPayload } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 
 type TokenPayload = {
     id: string;
-};
+}
 
 export async function tokenValidateMiddleware(request: Request, response: Response, next: NextFunction) {
     try {
-        const { authorization } = request.headers
+        const { authorization } = request.headers;
 
         if (!authorization) {
             return response.status(401).json({ error: "Authorization header is missing" })
@@ -21,10 +21,9 @@ export async function tokenValidateMiddleware(request: Request, response: Respon
 
         const decodedToken = jwt.verify(token, process.env.SECRET as string) as TokenPayload
 
-        request.body = {
-            _id: decodedToken.id,
-            ...request.body,
-        };
+        // Adicionar o ID decodificado ao corpo da requisição
+        //request.body.id = id       não ta funcionando esta merda
+        request.user = decodedToken
 
         next()
     } catch (error) {
@@ -32,3 +31,4 @@ export async function tokenValidateMiddleware(request: Request, response: Respon
         return response.status(401).json({ error: "Invalid token" })
     }
 }
+

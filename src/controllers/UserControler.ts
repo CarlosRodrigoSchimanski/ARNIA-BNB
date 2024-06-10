@@ -4,9 +4,15 @@ import { UserService } from "../service/UserService"
 import { Request, Response } from 'express'
 import { codes } from "../httpCode"
 import * as yup from "yup"
+import { BookingRepository } from "../repositories/BookingRepository"
+import { BookingModel } from "../models/BookingModel"
+import { BookingService } from "../service/BookingService"
 
 const userRepository = new UserRepository(UserModel)
 const userService = new UserService(userRepository)
+
+const bookingRepository = new BookingRepository(BookingModel)
+const bookingService = new BookingService(bookingRepository)
 
 export async function createUser(request: Request, response: Response) {
     try {
@@ -37,8 +43,32 @@ export async function loginUser(request: Request, response: Response) {
         await loginValidation.validate(loginData)
         
         const token = await userService.loginUser(loginData)
-        return response.status(codes.created).send(token)
+        return response.status(codes.created).send({token:token})
     } catch (error:any) {
+        return response.status(codes.badRequest).json({ error: error.message })
+    }
+}
+
+export async function listUserBookings(request: Request, response: Response) {
+    try {
+        const userId = request.user.id
+        const userWithBookings = await userService.listUserBookings(userId)
+        if (userWithBookings) {
+            return response.status(codes.created).send({list:userWithBookings.bookings})
+        } else {
+            return response.status(codes.badRequest).json({ error: "User not found" })
+        }
+    } catch (error: any) {
+        return response.status(codes.badRequest).json({ error: error.message })
+    }
+}
+
+export async function deleteBooking(request: Request, response: Response){
+    try {
+        const userId = request.user.id
+        const returned = userService.removeBooking(userId,request.body.bookingId,bookingService)
+        return response.status(codes.created).send({returned})
+    } catch (error: any) {
         return response.status(codes.badRequest).json({ error: error.message })
     }
 }

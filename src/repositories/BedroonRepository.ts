@@ -23,4 +23,16 @@ export class BedroomRepository {
     async getAllRoomsByStatus(status: string): Promise<IBedroom[]> {
         return this.bedroomModel.find({ status: status }).exec()
     }
+
+    async findRoomsNotInList(roomIds:string[]): Promise<IBedroom[]> {
+        try {
+            const roomsNotInList = await this.bedroomModel.find({
+                _id: { $nin: roomIds }
+            }).exec()
+
+            return roomsNotInList
+        } catch (error) {
+            throw new Error(`Erro ao buscar quartos que não estão na lista: ${error}`)
+        }
+    }
 }
