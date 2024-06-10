@@ -45,6 +45,7 @@ A aplicação possui as seguintes funcionalidades principais:
 ```plaintext
 DATABASE_URL=<URL_do_seu_banco_de_dados>
 SECRET=<Sua_chave_secreta_para_gerar_tokens_JWT>
+```
 
 Inicie o servidor com o comando npm run dev ou yarn dev.
 
@@ -52,8 +53,6 @@ Inicie o servidor com o comando npm run dev ou yarn dev.
 Licença
 Este projeto está licenciado sob a licença MIT.
 
-
-Essas modificações adicionam uma introdução breve, instruções detalhadas sobre como configurar as variáveis de ambiente no arquivo `.env`, além de destacar as seções principais do README para facilitar a leitura e compreensão.
 
 
 

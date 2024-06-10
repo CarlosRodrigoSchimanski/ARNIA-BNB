@@ -41,9 +41,8 @@ MongoDB
 Copiar código
 DATABASE_URL=<Your_database_URL>
 SECRET=<Your_secret_key_for_generating_JWT_tokens>
+```
 
 Start the server with the command npm run dev or yarn dev.
 License
 This project is licensed under the MIT License.
-
-These modifications add a brief introduction, detailed instructions on setting up environment variables in the .env file, and highlight the main sections of the README to improve readability and comprehension.
