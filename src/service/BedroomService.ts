@@ -13,7 +13,7 @@ export class BedroomService {
 
     async deleteImage(id: string) {
         try {
-            const imagePath = join(__dirname, "..", "..", "uploads", id)
+            const imagePath = join(__dirname, "..", "uploads", id)
             await rm(imagePath)
         } catch (error) {
             console.error("Error deleting image:", error)
